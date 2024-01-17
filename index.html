@@ -1,0 +1,168 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue SPA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #18181b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4444447a;
+            border-radius: 12px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444444;
+        }
+
+        /* transitions */
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 0.3s;
+        }
+
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="bg-stone-300 w-screen overflow-hidden h-screen flex flex-col">
+        <document-navbar></document-navbar>
+        <div class="flex-1 overflow-y-auto">
+            <router-view></router-view>
+        </div>
+        <!-- modals container -->
+        <transition name="fade">
+            <div v-if="activeModal" @click="activeModal = null"
+                class="fixed inset-0 w-screen h-screen flex bg-black bg-opacity-50 items-center justify-center"
+                style="z-index: 90">
+                <component @click.stop :is="activeModal"></component>
+            </div>
+        </transition>
+
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@4.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+    <script>
+
+        const options = {
+            moduleCache: {
+                vue: Vue
+            },
+            async getFile(url) {
+
+                const res = await fetch(url);
+                if (!res.ok)
+                    throw Object.assign(new Error(res.statusText + ' ' + url), { res });
+                return {
+                    getContentData: asBinary => asBinary ? res.arrayBuffer() : res.text(),
+                }
+            },
+            addStyle(textContent) {
+
+                const style = Object.assign(document.createElement('style'), { textContent });
+                const ref = document.head.getElementsByTagName('style')[0] || null;
+                document.head.insertBefore(style, ref);
+            },
+        }
+
+        const { loadModule } = window['vue3-sfc-loader'];
+
+
+
+        const app = Vue.createApp({
+            components: {
+                'document-navbar': Vue.defineAsyncComponent(() => loadModule('./components/document-navbar.vue', options)),
+                'example-modal': Vue.defineAsyncComponent(() => loadModule('./components/example-modal.vue', options))
+            },
+            data() {
+                return {
+                    activeModal: "",
+                    info: {
+                        name: "VUECDN"
+                    }
+                }
+            },
+            methods: {
+                formatRelativeTime(dateTimeStr) {
+                    const currentDate = new Date();
+                    const providedDate = new Date(dateTimeStr);
+
+                    // Calculate the timezone offset in minutes
+                    const timezoneOffset = providedDate.getTimezoneOffset();
+
+                    // Normalize the provided date by subtracting the offset and add an hour
+                    providedDate.setMinutes(providedDate.getMinutes() - timezoneOffset);
+
+                    const timeDifference = currentDate - providedDate;
+
+                    // Define time intervals in milliseconds
+                    const minute = 60 * 1000;
+                    const hour = minute * 60;
+                    const day = hour * 24;
+                    const month = day * 30;
+                    const year = day * 365;
+
+                    if (timeDifference < minute) {
+
+                        return "Just now";
+                    } else if (timeDifference < hour) {
+                        const minutesAgo = Math.floor(timeDifference / minute);
+                        return `${minutesAgo} minute${minutesAgo > 1 ? 's' : ''} ago`;
+                    } else if (timeDifference < day) {
+                        const hoursAgo = Math.floor(timeDifference / hour);
+                        return `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`;
+                    } else if (timeDifference < month) {
+                        const daysAgo = Math.floor(timeDifference / day);
+                        return `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`;
+                    } else if (timeDifference < year) {
+                        const monthsAgo = Math.floor(timeDifference / month);
+                        return `${monthsAgo} month${monthsAgo > 1 ? 's' : ''} ago`;
+                    } else {
+                        const yearsAgo = Math.floor(timeDifference / year);
+                        return `${yearsAgo} year${yearsAgo > 1 ? 's' : ''} ago`;
+                    }
+
+
+
+                },
+
+            },
+        });
+        const router = VueRouter.createRouter({
+            history: VueRouter.createWebHashHistory(),
+            routes: [
+                { path: '/', component: Vue.defineAsyncComponent(() => loadModule('./components/home.vue', options)) },
+                { path: '/home', component: Vue.defineAsyncComponent(() => loadModule('./components/home.vue', options)) },
+                { path: '/page-2', component: Vue.defineAsyncComponent(() => loadModule('./components/page-2.vue', options)) },
+                // Add more routes as needed
+            ],
+        });
+
+        app.use(router);
+        app.mount('#app');
+
+    </script>
+</body>
+
+</html>
