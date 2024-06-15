@@ -19,9 +19,8 @@ To get started with this template, follow these steps:
 1. Clone the repository to your local machine:
 
 ```
-git clone https://github.com/lendome/vue-sfc-cdn
+git clone https://github.com/lendome/vue-sfc-cdn.git
 ```
-(dont even know if that will work, I guess just download it as a zip)
 
 2. Navigate to the project directory:
 
