@@ -93,8 +93,8 @@
 
         const app = Vue.createApp({
             components: {
-                'document-navbar': Vue.defineAsyncComponent(() => loadModule('./components/document-navbar.vue', options)),
-                'example-modal': Vue.defineAsyncComponent(() => loadModule('./components/example-modal.vue', options))
+                'document-navbar': Vue.defineAsyncComponent(() => loadModule('./components/modules/document-navbar.vue', options)),
+                'example-modal': Vue.defineAsyncComponent(() => loadModule('./components/modals/example-modal.vue', options))
             },
             data() {
                 return {
@@ -153,9 +153,9 @@
         const router = VueRouter.createRouter({
             history: VueRouter.createWebHashHistory(),
             routes: [
-                { path: '/', component: Vue.defineAsyncComponent(() => loadModule('./components/home.vue', options)) },
-                { path: '/home', component: Vue.defineAsyncComponent(() => loadModule('./components/home.vue', options)) },
-                { path: '/page-2', component: Vue.defineAsyncComponent(() => loadModule('./components/page-2.vue', options)) },
+                { path: '/', component: Vue.defineAsyncComponent(() => loadModule('./components/pages/home.vue', options)) },
+                { path: '/home', component: Vue.defineAsyncComponent(() => loadModule('./components/pages/home.vue', options)) },
+                { path: '/page-2', component: Vue.defineAsyncComponent(() => loadModule('./components/pages/page-2.vue', options)) },
                 // Add more routes as needed
             ],
         });
