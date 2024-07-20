@@ -33,15 +33,58 @@
             transition: opacity 0.3s;
         }
 
-        .fade-enter,
+        .fade-enter-from,
         .fade-leave-to {
             opacity: 0;
         }
     </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    height: {
+                        'screen-minus-24': 'calc(100vh - 3rem)',
+                    },
+                    colors: {
+
+                        'mine-shaft': {
+                            '50': '#f6f6f6',
+                            '100': '#e7e7e7',
+                            '200': '#d1d1d1',
+                            '300': '#b0b0b0',
+                            '400': '#888888',
+                            '500': '#6d6d6d',
+                            '600': '#5d5d5d',
+                            '700': '#4f4f4f',
+                            '800': '#454545',
+                            '900': '#333333',
+                            '950': '#262626',
+                        },
+                        'plantation': {
+                            '50': '#f4f9f7',
+                            '100': '#dcebe5',
+                            '200': '#b9d6cb',
+                            '300': '#8ebaab',
+                            '400': '#669b8a',
+                            '500': '#4c8071',
+                            '600': '#3b665a',
+                            '700': '#304f47',
+                            '800': '#2b443d',
+                            '900': '#273a36',
+                            '950': '#13201e',
+                        },
+
+
+                    },
+                }
+            }
+        }
+    </script>
 </head>
 
 <body>
-    <div id="app" class="bg-stone-300 w-screen overflow-hidden h-screen flex flex-col">
+    <div id="app" class="bg-neutral-300 w-screen overflow-hidden h-screen flex flex-col">
         <document-navbar></document-navbar>
         <div class="flex-1 overflow-y-auto">
             <router-view></router-view>
